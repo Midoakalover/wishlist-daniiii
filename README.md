@@ -4,7 +4,7 @@ Bienvenue sur mon site de liste de souhaits ✨
 Ce projet a pour but de partager facilement les cadeaux que j’aimerais recevoir — avec un design stylé, un formulaire dynamique, et une touche de magie.
 
 ## 🔗 Accès au site
-👉 [Clique ici pour accéder à la liste](https://ton-user.github.io/liste-souhaits-daniiii/)  
+👉 [Clique ici pour accéder à la liste](https://midoakalover.github.io/)  
 
 ## 🛠️ Fonctionnalités
 - Interface animée et responsive
