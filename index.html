@@ -96,21 +96,29 @@
             font-size: 1.6rem;
         }
         
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
         .item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            padding: 12px;
-            border-radius: 8px;
             background-color: #f9f9f9;
-            border-left: 3px solid transparent;
+            border-radius: 10px;
+            padding: 15px;
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            border-left: 3px solid transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         
         .item:hover {
             background-color: var(--light-color);
             border-left: 3px solid var(--primary-color);
-            transform: translateX(5px);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
         
         .item.selected {
@@ -118,8 +126,50 @@
             border-left: 3px solid var(--primary-color);
         }
         
+        .item-image {
+            width: 100%;
+            height: 120px;
+            object-fit: contain;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            transition: transform 0.3s ease;
+        }
+        
+        .item:hover .item-image {
+            transform: scale(1.05);
+        }
+        
+        .price-tag {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .affordable {
+            background-color: #4caf50;
+        }
+        
+        .medium {
+            background-color: #ff9800;
+        }
+        
+        .premium {
+            background-color: #f44336;
+        }
+        
         .checkbox-wrapper {
             position: relative;
+            margin-top: 10px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .custom-checkbox {
@@ -164,12 +214,14 @@
         }
         
         .item label {
-            flex-grow: 1;
             cursor: pointer;
-            padding-left: 15px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 500;
             color: var(--text-color);
+            text-align: center;
+            margin-bottom: 10px;
+            display: block;
+            width: 100%;
         }
         
         .commit-section {
@@ -282,6 +334,29 @@
             display: none;
         }
         
+        .price-filter {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .filter-btn {
+            background-color: #f1f1f1;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
         /* Animation pour les cases cochées */
         @keyframes pulse {
             0% { transform: scale(1); }
@@ -328,6 +403,20 @@
                 padding: 12px 20px;
                 font-size: 1.1rem;
             }
+            
+            .items-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .items-grid {
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            }
+            
+            .item-image {
+                height: 100px;
+            }
         }
     </style>
 </head>
@@ -341,102 +430,243 @@
         <div class="intro animate__animated animate__fadeIn animate__delay-1s">
             <p>Merci de consulter ma liste de souhaits ! Si vous souhaitez m'offrir quelque chose, 
             cochez simplement les articles qui vous intéressent et laissez vos coordonnées pour que je puisse vous remercier.</p>
+            
+            <div class="price-filter">
+                <button class="filter-btn active" data-filter="all">Tous les prix</button>
+                <button class="filter-btn" data-filter="affordable">Petit budget</button>
+                <button class="filter-btn" data-filter="medium">Budget moyen</button>
+                <button class="filter-btn" data-filter="premium">Premium</button>
+            </div>
         </div>
         
-        <form id="wishlist-form" action="https://formspree.io/f/xzzrbjpo" method="POST">
+        <form id="wishlist-form" action="https://formspree.io/f/VOTRE_CODE_ICI" method="POST">
             <div class="category animate__animated animate__fadeInUp animate__delay-1s">
                 <h2>Accessoires et équipements</h2>
-                <div class="item">
-                    <div class="checkbox-wrapper">
-                        <input type="checkbox" id="item1" name="item1" value="Panier Tarmak B100 Easy" class="custom-checkbox">
-                        <span class="checkmark"></span>
+                <div class="items-grid">
+                    <div class="item" data-price="medium">
+                        <span class="price-tag medium">~100 000 FCFA</span>
+                        <img src="https://m.media-amazon.com/images/I/511vNZY6IgL._AC_SX679_.jpg" alt="Panier Tarmak B100 Easy" class="item-image">
+                        <label for="item1">Panier Tarmak B100 Easy</label>
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="item1" name="item1" value="Panier Tarmak B100 Easy" class="custom-checkbox">
+                            <span class="checkmark"></span>
+                        </div>
                     </div>
-                    <label for="item1">Panier Tarmak B100 Easy</label>
-                </div>
-                <div class="item">
-                    <div class="checkbox-wrapper">
-                        <input type="checkbox" id="item2" name="item2" value="Écouteurs Tecno Buds 4" class="custom-checkbox">
-                        <span class="checkmark"></span>
+                    
+                    <div class="item" data-price="medium">
+                        <span class="price-tag medium">~20 000 FCFA</span>
+                        <img src="https://d3fyizz0b46qgr.cloudfront.net/global/Accessories/true1/image/pc/1.jpg" alt="Écouteurs Tecno Buds 4" class="item-image">
+                        <label for="item2">Écouteurs Tecno True 1 Air</label>
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="item2" name="item2" value="Écouteurs Tecno Buds 4" class="custom-checkbox">
+                            <span class="checkmark"></span>
+                        </div>
                     </div>
-                    <label for="item2">Écouteurs Tecno Buds 4</label>
-                </div>
-                <div class="item">
-                    <div class="checkbox-wrapper">
-                        <input type="checkbox" id="item3" name="item3" value="Manette PS4, Xbox ou PS5 Mode / Style" class="custom-checkbox">
-                        <span class="checkmark"></span>
+                    
+                    <div class="item" data-price="medium">
+                        <span class="price-tag medium">~10 000FCFA</span>
+                        <img src="https://cdn.pixabay.com/photo/2021/12/28/17/07/gamer-6899810_1280.jpg" alt="Manette PS5" class="item-image">
+                        <label for="item3">Manette PS4, Xbox ou PS5</label>
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="item3" name="item3" value="Manette PS4, Xbox ou PS5" class="custom-checkbox">
+                            <span class="checkmark"></span>
+                        </div>
                     </div>
-                    <label for="item3">Manette PS4, Xbox ou PS5 Mode / Style</label>
-                </div>
-                <div class="item">
-                    <div class="checkbox-wrapper">
-                        <input type="checkbox" id="item8" name="item8" value="Un Katana (décoration ou collection)" class="custom-checkbox">
-                        <span class="checkmark"></span>
+                    
+                    <div class="item" data-price="medium">
+                        <span class="price-tag medium">~30 000FCFA</span>
+                        <img src="https://media.istockphoto.com/id/924341840/photo/sword-of-the-samurai-medieval-japanese-weapons.jpg?s=1024x1024&w=is&k=20&c=5OyuJWXaP0FobIPxCddllkRHozTU4lssQUFRr5Lkb3g=" alt="Katana décoratif" class="item-image">
+                        <label for="item8">Katana décoratif</label>
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="item8" name="item8" value="Katana décoratif" class="custom-checkbox">
+                            <span class="checkmark"></span>
+                        </div>
                     </div>
-                    <label for="item8">Un Katana (décoration ou collection)</label>
+                    
+                    <div class="item" data-price="affordable">
+                        <span class="price-tag affordable">~1000 FCFA</span>
+                        <img src="https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/89923901-3fb2-4b76-b1db-9524784d5336/U+J+ED+CUSH+POLY+CREW+3PR+144.png" alt="Chaussettes de sport" class="item-image">
+                        <label for="item13">Chaussettes de basket</label>
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="item13" name="item13" value="Chaussettes de basket" class="custom-checkbox">
+                            <span class="checkmark"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="item" data-price="affordable">
+                        <span class="price-tag affordable">~3000 FCFA</span>
+                        <img src="https://www.shutterstock.com/image-vector/cartoon-ski-skate-winter-sports-silhouette-2305140341" alt="Bonnet hiver" class="item-image">
+                        <label for="item14">Bonnet style Fisherman</label>
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="item14" name="item14" value="Bonnet style Fisherman" class="custom-checkbox">
+                            <span class="checkmark"></span>
+                        </div>
+                    </div>
                 </div>
             </div>
             
             <div class="category animate__animated animate__fadeInUp animate__delay-2s">
                 <h2>Chaussures</h2>
-                <div class="item">
-                    <div class="checkbox-wrapper">
-                        <input type="checkbox" id="item4" name="item4" value="Paire de Air Jordan 4 ou 11" class="custom-checkbox">
-                        <span class="checkmark"></span>
+                <div class="items-grid">
+                    <div class="item" data-price="premium">
+                        <span class="price-tag premium">~20 000 FCFA</span>
+                        <img src="https://images.stockx.com/images/Air-Jordan-4-Retro-Thunder-2023-Product.jpg" alt="Air Jordan 4" class="item-image">
+                        <label for="item4">Paire de Air Jordan 4</label>
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="item4" name="item4" value="Paire de Air Jordan 4" class="custom-checkbox">
+                            <span class="checkmark"></span>
+                        </div>
                     </div>
-                    <label for="item4">Paire de Air Jordan 4 ou 11</label>
-                </div>
-                <div class="item">
-                    <div class="checkbox-wrapper">
-                        <input type="checkbox" id="item5" name="item5" value="Paire de Air Force One blanche" class="custom-checkbox">
-                        <span class="checkmark"></span>
+                    
+                    <div class="item" data-price="medium">
+                        <span class="price-tag medium">~11 000 FCFA</span>
+                        <img src="https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/b7d9211c-26e7-431a-ac24-b0540fb3c00f/chaussure-air-force-1-07-pour-GjGXSP.png" alt="Air Force One blanche" class="item-image">
+                        <label for="item5">Paire de Air Force One blanche</label>
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="item5" name="item5" value="Paire de Air Force One blanche" class="custom-checkbox">
+                            <span class="checkmark"></span>
+                        </div>
                     </div>
-                    <label for="item5">Paire de Air Force One blanche</label>
-                </div>
-                <div class="item">
-                    <div class="checkbox-wrapper">
-                        <input type="checkbox" id="item6" name="item6" value="Paire de Air Jordan 1" class="custom-checkbox">
-                        <span class="checkmark"></span>
+                    
+                    <div class="item" data-price="premium">
+                        <span class="price-tag premium">~15 000 FCFA</span>
+                        <img src="https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/bdbed338-76cb-41d5-bf09-ab17999dd28f/chaussure-air-jordan-1-mid-pour-Szmg4n.png" alt="Air Jordan 1" class="item-image">
+                        <label for="item6">Paire de Air Jordan 1</label>
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="item6" name="item6" value="Paire de Air Jordan 1" class="custom-checkbox">
+                            <span class="checkmark"></span>
+                        </div>
                     </div>
-                    <label for="item6">Paire de Air Jordan 1</label>
+                    
+                    <div class="item" data-price="affordable">
+                        <span class="price-tag affordable">~500 FCFA</span>
+                        <img src="https://image.uniqlo.com/UQ/ST3/WesternCommon/imagesgoods/455322/item/goods_11_455322_3x4.jpg?width=400" alt="Chaussettes Uniqlo" class="item-image">
+                        <label for="item22">Pack chaussettes Uniqlo (x3)</label>
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="item22" name="item22" value="Pack chaussettes Uniqlo" class="custom-checkbox">
+                            <span class="checkmark"></span>
+                        </div>
+                    </div>
                 </div>
             </div>
             
             <div class="category animate__animated animate__fadeInUp animate__delay-3s">
                 <h2>Tech / Appareils</h2>
-                <div class="item">
-                    <div class="checkbox-wrapper">
-                        <input type="checkbox" id="item7" name="item7" value="iPhone 12 ou 12 mini" class="custom-checkbox">
-                        <span class="checkmark"></span>
+                <div class="items-grid">
+                    <div class="item" data-price="premium">
+                        <span class="price-tag premium">~250 000 FCFA</span>
+                        <img src="https://fdn.gsmarena.com/imgroot/reviews/20/apple-iphone-12/lifestyle/-1024w2/gsmarena_002.jpg" alt="iPhone 12" class="item-image">
+                        <label for="item7">iPhone 12 ou 12 mini</label>
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="item7" name="item7" value="iPhone 12 ou 12 mini" class="custom-checkbox">
+                            <span class="checkmark"></span>
+                        </div>
                     </div>
-                    <label for="item7">iPhone 12 ou 12 mini</label>
+                    
+                    <div class="item" data-price="premium">
+                        <span class="price-tag premium">~550 000 FCFA</span>
+                        <img src="https://dlcdnwebimgs.asus.com/files/media/ABD36868-5B12-411F-B118-BE85A3BF381C/v1/img/performance/chip-nvdia.webp" alt="PC Asus ROG" class="item-image">
+                        <label for="item9">PC Asus ROG</label>
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="item9" name="item9" value="PC Asus ROG" class="custom-checkbox">
+                            <span class="checkmark"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="item" data-price="premium">
+                        <span class="price-tag premium">~450 000 FCFA</span>
+                        <img src="https://dlcdnwebimgs.asus.com/gain/9B345703-C095-4C0C-A86F-0E48FB76F93F/w1000/h732" alt="Console ROG Ally" class="item-image">
+                        <label for="item10">Console ROG Ally</label>
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="item10" name="item10" value="Console ROG Ally" class="custom-checkbox">
+                            <span class="checkmark"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="item" data-price="premium">
+                        <span class="price-tag premium">~350 000 FCFA</span>
+                        <img src="https://cdn.mos.cms.futurecdn.net/JXHeiU3yEVP3sktFByS9m9.jpg" alt="Console Steam Deck" class="item-image">
+                        <label for="item11">Console Steam Deck</label>
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="item11" name="item11" value="Console Steam Deck" class="custom-checkbox">
+                            <span class="checkmark"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="item" data-price="affordable">
+                        <span class="price-tag affordable">~4000 FCFA</span>
+                        <img src="https://m.media-amazon.com/images/I/51MCPxGGXAL._AC_SX679_.jpg" alt="Chargeur rapide" class="item-image">
+                        <label for="item16">Chargeur rapide iPhone</label>
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="item16" name="item16" value="Chargeur rapide USB-C" class="custom-checkbox">
+                            <span class="checkmark"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="item" data-price="affordable">
+                        <span class="price-tag affordable">~6 500 FCFA</span>
+                        <img src="https://crazyhorsecraft.com/cdn/shop/products/3-Vegetble-tanned-leather-minimalist-wallet-origami-foldable-carbon-black.jpg?v=1706026767&width=1200" alt="Porte-cartes" class="item-image">
+                        <label for="item23">Porte-cartes minimaliste</label>
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="item23" name="item23" value="Porte-cartes minimaliste" class="custom-checkbox">
+                            <span class="checkmark"></span>
+                        </div>
+                    </div>
                 </div>
-                <div class="item">
-                    <div class="checkbox-wrapper">
-                        <input type="checkbox" id="item9" name="item9" value="PC Asus ROG" class="custom-checkbox">
-                        <span class="checkmark"></span>
+            </div>
+            
+            <div class="category animate__animated animate__fadeInUp animate__delay-3s">
+                <h2>Autres idées</h2>
+                <div class="items-grid">
+                    <div class="item" data-price="affordable">
+                        <span class="price-tag affordable">~???FCFA</span>
+                        <img src="https://c3.staticsfly.com/asset/fetch/cs/MUG-47005-383-MERCHMEDIUM_ALT2-BLUEMUG/thumbnail.preview/v4" alt="Mug personnalisé" class="item-image">
+                        <label for="item18">Mug personnalisé</label>
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="item18" name="item18" value="Mug personnalisé" class="custom-checkbox">
+                            <span class="checkmark"></span>
+                        </div>
                     </div>
-                    <label for="item9">PC Asus ROG</label>
-                </div>
-                <div class="item">
-                    <div class="checkbox-wrapper">
-                        <input type="checkbox" id="item10" name="item10" value="Console ROG Ally" class="custom-checkbox">
-                        <span class="checkmark"></span>
+                    
+                    <div class="item" data-price="affordable">
+                        <span class="price-tag affordable">~6000 FCFA€</span>
+                        <img src="https://m.media-amazon.com/images/I/6175eJZtY+L._AC_SX569_.jpg" alt="Tapis de souris XXL" class="item-image">
+                        <label for="item19">Tapis de souris XXL</label>
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="item19" name="item19" value="Tapis de souris XXL" class="custom-checkbox">
+                            <span class="checkmark"></span>
+                        </div>
                     </div>
-                    <label for="item10">Console ROG Ally</label>
-                </div>
-                <div class="item">
-                    <div class="checkbox-wrapper">
-                        <input type="checkbox" id="item11" name="item11" value="Console Steam Deck" class="custom-checkbox">
-                        <span class="checkmark"></span>
+                    
+                    <div class="item" data-price="medium">
+                        <span class="price-tag medium">~10 000FCFA</span>
+                        <img src="https://m.media-amazon.com/images/I/715Yv7VujAL._AC_UY327_FMwebp_QL65_.jpg" alt="Support casque" class="item-image">
+                        <label for="item20">Support casque gaming</label>
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="item20" name="item20" value="Support casque gaming" class="custom-checkbox">
+                            <span class="checkmark"></span>
+                        </div>
                     </div>
-                    <label for="item11">Console Steam Deck</label>
-                </div>
-                <div class="item">
-                    <div class="checkbox-wrapper">
-                        <input type="checkbox" id="item12" name="item12" value="Autre chose de 'cool'" class="custom-checkbox">
-                        <span class="checkmark"></span>
+                    
+                    <div class="item" data-price="affordable">
+                        <span class="price-tag affordable">~???FCFA</span>
+                        <img src="https://render.fineartamerica.com/images/rendered/medium/poster/8/5.5/break/images/artworkimages/medium/3/59-stephen-curry-noah-graham.jpg" alt="Poster basket" class="item-image">
+                        <label for="item21">Posters de basket</label>
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="item21" name="item21" value="Posters de basket" class="custom-checkbox">
+                            <span class="checkmark"></span>
+                        </div>
                     </div>
-                    <label for="item12">Autre chose de "cool" (précisez dans les commentaires)</label>
+                    
+                    <div class="item" data-price="affordable">
+                        <span class="price-tag affordable">~1000+ FCFA</span>
+                        <img src="data:image/jpeg;base64,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" alt="Wave Money" class="item-image">
+                        <label for="item24">Dépôt Wave de votre choix (minimum 1K)</label>
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="item24" name="item24" value="Dépôt Wave" class="custom-checkbox">
+                            <span class="checkmark"></span>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -445,158 +675,66 @@
                 <div class="contact-info">
                     <input type="text" id="name" name="name" placeholder="Votre nom" required>
                     <input type="email" id="email" name="_replyto" placeholder="Votre email" required>
-                    <input type="tel" id="phone" name="phone" placeholder="Votre numéro de téléphone (optionnel)">
-                    <textarea id="message" name="message" placeholder="Commentaires ou précisions (taille, couleur, etc.)"></textarea>
+                    <input type="tel" id="phone" name="phone" placeholder="Votre téléphone">
+                    <textarea id="hesitation" name="hesitation" rows="3" placeholder="Si vous hésitez entre plusieurs articles, précisez-le ici"></textarea>
+                    <textarea id="message" name="message" rows="4" placeholder="Votre message (Si vous trouver que les cadeaux ne sont pas abordables mettez le votre bisous)"></textarea>
+                    <input type="hidden" name="_subject" value="Nouveau message de la liste de souhaits">
+                    <input type="hidden" name="_next" value="https://votre-site.com/merci.html">
+                    <button type="submit" class="btn">Envoyer</button>
                 </div>
-                <input type="hidden" name="_subject" value="Nouvelle sélection de liste de souhaits">
-                <input type="hidden" name="_format" value="plain">
-                <input type="text" name="_gotcha" class="hidden-field">
-                <button type="submit" class="btn animate__animated animate__pulse" id="submit-btn">Confirmer ma sélection</button>
-                <div class="thanks-message" id="thanks-message">
-                    <h3>Merci beaucoup pour votre générosité !</h3>
-                    <p>Votre sélection a été enregistrée. Je vous contacterai pour les détails pratiques.</p>
+                <div class="thanks-message">
+                    <h3>Merci beaucoup !</h3>
+                    <p>Votre message a bien été envoyé.</p>
                 </div>
             </div>
         </form>
-        
-        <footer class="animate__animated animate__fadeIn animate__delay-5s">
-            <p>© 2025 - Ma Liste de Souhaits</p>
-        </footer>
     </div>
+    
+    <footer>
+        <p>&copy; 2023 Ma Liste de Souhaits. Tous droits réservés.</p>
+    </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('wishlist-form');
-            const thanksMessage = document.getElementById('thanks-message');
-            const checkboxes = document.querySelectorAll('.custom-checkbox');
-            const items = document.querySelectorAll('.item');
-            
-            // Animation et effet visuel quand on coche une case
-            checkboxes.forEach((checkbox, index) => {
-                checkbox.addEventListener('change', function() {
-                    const parentItem = this.closest('.item');
-                    
-                    if (this.checked) {
-                        parentItem.classList.add('selected');
-                        parentItem.classList.add('pulse');
-                        setTimeout(() => {
-                            parentItem.classList.remove('pulse');
-                        }, 500);
+        // Filtrage des articles par prix
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const items = document.querySelectorAll('.item');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const filter = button.getAttribute('data-filter');
+
+                items.forEach(item => {
+                    if (filter === 'all' || item.getAttribute('data-price') === filter) {
+                        item.style.display = 'flex';
                     } else {
-                        parentItem.classList.remove('selected');
+                        item.style.display = 'none';
                     }
                 });
+
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
             });
-            
-            // Animation lors du défilement
-            function isElementInViewport(el) {
-                const rect = el.getBoundingClientRect();
-                return (
-                    rect.top >= 0 &&
-                    rect.left >= 0 &&
-                    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-                    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-                );
-            }
-            
-            function animateIfVisible() {
-                document.querySelectorAll('.category').forEach((category, index) => {
-                    if (isElementInViewport(category) && !category.classList.contains('slide-in-right')) {
-                        category.classList.add('slide-in-right');
-                        category.style.animationDelay = `${index * 0.2}s`;
-                    }
-                });
-            }
-            
-            // Déclencher l'animation au défilement
-            window.addEventListener('scroll', animateIfVisible);
-            animateIfVisible(); // Vérifier au chargement initial
-            
-            // Gestion du formulaire
-            form.addEventListener('submit', function(event) {
-                event.preventDefault();
-                
-                // Vérifier qu'au moins un article est sélectionné
-                const selectedCheckboxes = document.querySelectorAll('.custom-checkbox:checked');
-                if (selectedCheckboxes.length === 0) {
-                    alert('Veuillez sélectionner au moins un article de la liste de souhaits.');
-                    return;
+        });
+
+        // Soumission du formulaire
+        const form = document.getElementById('wishlist-form');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: form.method,
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
                 }
-                
-                // Créer un résumé des articles sélectionnés pour l'email
-                let selectedItems = [];
-                selectedCheckboxes.forEach(checkbox => {
-                    selectedItems.push(checkbox.value);
-                });
-                
-                // Ajouter un champ caché avec le résumé des articles sélectionnés
-                if (!document.getElementById('selected-items-summary')) {
-                    const hiddenField = document.createElement('input');
-                    hiddenField.type = 'hidden';
-                    hiddenField.id = 'selected-items-summary';
-                    hiddenField.name = 'selected_items';
-                    hiddenField.value = selectedItems.join(', ');
-                    form.appendChild(hiddenField);
+            }).then(response => {
+                if (response.ok) {
+                    form.reset();
+                    document.querySelector('.thanks-message').style.display = 'block';
                 } else {
-                    document.getElementById('selected-items-summary').value = selectedItems.join(', ');
+                    alert('Une erreur est survenue. Merci de réessayer plus tard.');
                 }
-                
-                // Envoyer le formulaire à Formspree
-                const formData = new FormData(form);
-                const url = form.action;
-                
-                // Animation du bouton lors de l'envoi
-                const submitBtn = document.getElementById('submit-btn');
-                submitBtn.textContent = "Envoi en cours...";
-                submitBtn.disabled = true;
-                
-                fetch(url, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                })
-                .then(response => {
-                    if (response.ok) {
-                        // Afficher le message de remerciement avec une animation
-                        thanksMessage.style.display = 'block';
-                        thanksMessage.classList.add('animate__animated', 'animate__fadeInUp');
-                        
-                        // Réinitialiser le formulaire
-                        form.reset();
-                        
-                        // Retirer les classes "selected" des éléments
-                        items.forEach(item => {
-                            item.classList.remove('selected');
-                        });
-                        
-                        // Faire défiler jusqu'au message de remerciement
-                        thanksMessage.scrollIntoView({ behavior: 'smooth' });
-                        
-                        // Masquer le message après 5 secondes
-                        setTimeout(() => {
-                            thanksMessage.classList.add('animate__fadeOutDown');
-                            setTimeout(() => {
-                                thanksMessage.style.display = 'none';
-                                thanksMessage.classList.remove('animate__fadeOutDown');
-                            }, 500);
-                        }, 5000);
-                        
-                        // Réinitialiser le bouton
-                        submitBtn.textContent = "Confirmer ma sélection";
-                        submitBtn.disabled = false;
-                    } else {
-                        throw new Error('Erreur lors de l\'envoi du formulaire');
-                    }
-                })
-                .catch(error => {
-                    console.error('Erreur:', error);
-                    alert('Une erreur est survenue lors de l\'envoi du formulaire. Veuillez réessayer plus tard.');
-                    submitBtn.textContent = "Confirmer ma sélection";
-                    submitBtn.disabled = false;
-                });
             });
         });
     </script>
