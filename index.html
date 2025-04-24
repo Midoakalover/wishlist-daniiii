@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ma Liste de Souhaits</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --primary-color: #00b8d4; /* Bleu cyan principal */
+            --secondary-color: #0091a7;
+            --accent-color: #00e5ff;
+            --dark-color: #006064;
+            --light-color: #e0f7fa;
+            --white-color: #ffffff;
+            --text-color: #263238;
+            --success-color: #00c853;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        body {
+            background-color: var(--light-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
+            color: var(--white-color);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 184, 212, 0.3);
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        
+        header:hover {
+            transform: translateY(-5px);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .intro {
+            margin-bottom: 30px;
+            text-align: center;
+            background-color: var(--white-color);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .category {
+            background-color: var(--white-color);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .category::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary-color), var(--accent-color));
+        }
+        
+        .category h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            font-size: 1.6rem;
+        }
+        
+        .item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            border-left: 3px solid transparent;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
+        .item:hover {
+            background-color: var(--light-color);
+            border-left: 3px solid var(--primary-color);
+            transform: translateX(5px);
+        }
+        
+        .item.selected {
+            background-color: rgba(0, 184, 212, 0.1);
+            border-left: 3px solid var(--primary-color);
+        }
+        
+        .checkbox-wrapper {
+            position: relative;
+        }
+        
+        .custom-checkbox {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+        
+        .checkmark {
+            position: relative;
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            border: 2px solid var(--primary-color);
+            border-radius: 5px;
+            background-color: #fff;
+            transition: all 0.3s ease-in-out;
+        }
+        
+        .custom-checkbox:checked ~ .checkmark {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+            left: 9px;
+            top: 5px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+        
+        .custom-checkbox:checked ~ .checkmark:after {
+            display: block;
+        }
+        
+        .item label {
+            flex-grow: 1;
+            cursor: pointer;
+            padding-left: 15px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        .commit-section {
+            background-color: var(--white-color);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .contact-info {
+            margin-bottom: 20px;
+        }
+        
+        .contact-info input, .contact-info textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-info input:focus, .contact-info textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(0, 184, 212, 0.2);
+            outline: none;
+        }
+        
+        .contact-info textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 184, 212, 0.3);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
+        .btn:hover {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            box-shadow: 0 6px 12px rgba(0, 184, 212, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(0, 184, 212, 0.2);
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transition: all 0.6s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .thanks-message {
+            display: none;
+            text-align: center;
+            padding: 25px;
+            background-color: rgba(0, 200, 83, 0.1);
+            color: var(--success-color);
+            border-radius: 8px;
+            margin-top: 25px;
+            border-left: 5px solid var(--success-color);
+        }
+        
+        .thanks-message h3 {
+            color: var(--success-color);
+            margin-bottom: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            padding: 20px 0;
+        }
+        
+        .hidden-field {
+            display: none;
+        }
+        
+        /* Animation pour les cases cochées */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 0.5s;
+        }
+        
+        /* Animation pour le titre */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .float {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        /* Animation pour les catégories */
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .slide-in-right {
+            animation: slideInRight 0.5s forwards;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .btn {
+                padding: 12px 20px;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="animate__animated animate__fadeIn">
+            <h1 class="float">Ma Liste de Souhaits</h1>
+            <p>Voici les cadeaux qui me feraient plaisir !</p>
+        </header>
+        
+        <div class="intro animate__animated animate__fadeIn animate__delay-1s">
+            <p>Merci de consulter ma liste de souhaits ! Si vous souhaitez m'offrir quelque chose, 
+            cochez simplement les articles qui vous intéressent et laissez vos coordonnées pour que je puisse vous remercier.</p>
+        </div>
+        
+        <form id="wishlist-form" action="https://formspree.io/f/VOTRE_CODE_ICI" method="POST">
+            <div class="category animate__animated animate__fadeInUp animate__delay-1s">
+                <h2>Accessoires et équipements</h2>
+                <div class="item">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="item1" name="item1" value="Panier Tarmak B100 Easy" class="custom-checkbox">
+                        <span class="checkmark"></span>
+                    </div>
+                    <label for="item1">Panier Tarmak B100 Easy</label>
+                </div>
+                <div class="item">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="item2" name="item2" value="Écouteurs Tecno Buds 4" class="custom-checkbox">
+                        <span class="checkmark"></span>
+                    </div>
+                    <label for="item2">Écouteurs Tecno Buds 4</label>
+                </div>
+                <div class="item">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="item3" name="item3" value="Manette PS4, Xbox ou PS5 Mode / Style" class="custom-checkbox">
+                        <span class="checkmark"></span>
+                    </div>
+                    <label for="item3">Manette PS4, Xbox ou PS5 Mode / Style</label>
+                </div>
+                <div class="item">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="item8" name="item8" value="Un Katana (décoration ou collection)" class="custom-checkbox">
+                        <span class="checkmark"></span>
+                    </div>
+                    <label for="item8">Un Katana (décoration ou collection)</label>
+                </div>
+            </div>
+            
+            <div class="category animate__animated animate__fadeInUp animate__delay-2s">
+                <h2>Chaussures</h2>
+                <div class="item">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="item4" name="item4" value="Paire de Air Jordan 4 ou 11" class="custom-checkbox">
+                        <span class="checkmark"></span>
+                    </div>
+                    <label for="item4">Paire de Air Jordan 4 ou 11</label>
+                </div>
+                <div class="item">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="item5" name="item5" value="Paire de Air Force One blanche" class="custom-checkbox">
+                        <span class="checkmark"></span>
+                    </div>
+                    <label for="item5">Paire de Air Force One blanche</label>
+                </div>
+                <div class="item">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="item6" name="item6" value="Paire de Air Jordan 1" class="custom-checkbox">
+                        <span class="checkmark"></span>
+                    </div>
+                    <label for="item6">Paire de Air Jordan 1</label>
+                </div>
+            </div>
+            
+            <div class="category animate__animated animate__fadeInUp animate__delay-3s">
+                <h2>Tech / Appareils</h2>
+                <div class="item">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="item7" name="item7" value="iPhone 12 ou 12 mini" class="custom-checkbox">
+                        <span class="checkmark"></span>
+                    </div>
+                    <label for="item7">iPhone 12 ou 12 mini</label>
+                </div>
+                <div class="item">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="item9" name="item9" value="PC Asus ROG" class="custom-checkbox">
+                        <span class="checkmark"></span>
+                    </div>
+                    <label for="item9">PC Asus ROG</label>
+                </div>
+                <div class="item">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="item10" name="item10" value="Console ROG Ally" class="custom-checkbox">
+                        <span class="checkmark"></span>
+                    </div>
+                    <label for="item10">Console ROG Ally</label>
+                </div>
+                <div class="item">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="item11" name="item11" value="Console Steam Deck" class="custom-checkbox">
+                        <span class="checkmark"></span>
+                    </div>
+                    <label for="item11">Console Steam Deck</label>
+                </div>
+                <div class="item">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="item12" name="item12" value="Autre chose de 'cool'" class="custom-checkbox">
+                        <span class="checkmark"></span>
+                    </div>
+                    <label for="item12">Autre chose de "cool" (précisez dans les commentaires)</label>
+                </div>
+            </div>
+            
+            <div class="commit-section animate__animated animate__fadeInUp animate__delay-4s">
+                <h2>Vos coordonnées</h2>
+                <div class="contact-info">
+                    <input type="text" id="name" name="name" placeholder="Votre nom" required>
+                    <input type="email" id="email" name="_replyto" placeholder="Votre email" required>
+                    <input type="tel" id="phone" name="phone" placeholder="Votre numéro de téléphone (optionnel)">
+                    <textarea id="message" name="message" placeholder="Commentaires ou précisions (taille, couleur, etc.)"></textarea>
+                </div>
+                <input type="hidden" name="_subject" value="Nouvelle sélection de liste de souhaits">
+                <input type="hidden" name="_format" value="plain">
+                <input type="text" name="_gotcha" class="hidden-field">
+                <button type="submit" class="btn animate__animated animate__pulse" id="submit-btn">Confirmer ma sélection</button>
+                <div class="thanks-message" id="thanks-message">
+                    <h3>Merci beaucoup pour votre générosité !</h3>
+                    <p>Votre sélection a été enregistrée. Je vous contacterai pour les détails pratiques.</p>
+                </div>
+            </div>
+        </form>
+        
+        <footer class="animate__animated animate__fadeIn animate__delay-5s">
+            <p>© 2025 - Ma Liste de Souhaits</p>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('wishlist-form');
+            const thanksMessage = document.getElementById('thanks-message');
+            const checkboxes = document.querySelectorAll('.custom-checkbox');
+            const items = document.querySelectorAll('.item');
+            
+            // Animation et effet visuel quand on coche une case
+            checkboxes.forEach((checkbox, index) => {
+                checkbox.addEventListener('change', function() {
+                    const parentItem = this.closest('.item');
+                    
+                    if (this.checked) {
+                        parentItem.classList.add('selected');
+                        parentItem.classList.add('pulse');
+                        setTimeout(() => {
+                            parentItem.classList.remove('pulse');
+                        }, 500);
+                    } else {
+                        parentItem.classList.remove('selected');
+                    }
+                });
+            });
+            
+            // Animation lors du défilement
+            function isElementInViewport(el) {
+                const rect = el.getBoundingClientRect();
+                return (
+                    rect.top >= 0 &&
+                    rect.left >= 0 &&
+                    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+                );
+            }
+            
+            function animateIfVisible() {
+                document.querySelectorAll('.category').forEach((category, index) => {
+                    if (isElementInViewport(category) && !category.classList.contains('slide-in-right')) {
+                        category.classList.add('slide-in-right');
+                        category.style.animationDelay = `${index * 0.2}s`;
+                    }
+                });
+            }
+            
+            // Déclencher l'animation au défilement
+            window.addEventListener('scroll', animateIfVisible);
+            animateIfVisible(); // Vérifier au chargement initial
+            
+            // Gestion du formulaire
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                // Vérifier qu'au moins un article est sélectionné
+                const selectedCheckboxes = document.querySelectorAll('.custom-checkbox:checked');
+                if (selectedCheckboxes.length === 0) {
+                    alert('Veuillez sélectionner au moins un article de la liste de souhaits.');
+                    return;
+                }
+                
+                // Créer un résumé des articles sélectionnés pour l'email
+                let selectedItems = [];
+                selectedCheckboxes.forEach(checkbox => {
+                    selectedItems.push(checkbox.value);
+                });
+                
+                // Ajouter un champ caché avec le résumé des articles sélectionnés
+                if (!document.getElementById('selected-items-summary')) {
+                    const hiddenField = document.createElement('input');
+                    hiddenField.type = 'hidden';
+                    hiddenField.id = 'selected-items-summary';
+                    hiddenField.name = 'selected_items';
+                    hiddenField.value = selectedItems.join(', ');
+                    form.appendChild(hiddenField);
+                } else {
+                    document.getElementById('selected-items-summary').value = selectedItems.join(', ');
+                }
+                
+                // Envoyer le formulaire à Formspree
+                const formData = new FormData(form);
+                const url = form.action;
+                
+                // Animation du bouton lors de l'envoi
+                const submitBtn = document.getElementById('submit-btn');
+                submitBtn.textContent = "Envoi en cours...";
+                submitBtn.disabled = true;
+                
+                fetch(url, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Afficher le message de remerciement avec une animation
+                        thanksMessage.style.display = 'block';
+                        thanksMessage.classList.add('animate__animated', 'animate__fadeInUp');
+                        
+                        // Réinitialiser le formulaire
+                        form.reset();
+                        
+                        // Retirer les classes "selected" des éléments
+                        items.forEach(item => {
+                            item.classList.remove('selected');
+                        });
+                        
+                        // Faire défiler jusqu'au message de remerciement
+                        thanksMessage.scrollIntoView({ behavior: 'smooth' });
+                        
+                        // Masquer le message après 5 secondes
+                        setTimeout(() => {
+                            thanksMessage.classList.add('animate__fadeOutDown');
+                            setTimeout(() => {
+                                thanksMessage.style.display = 'none';
+                                thanksMessage.classList.remove('animate__fadeOutDown');
+                            }, 500);
+                        }, 5000);
+                        
+                        // Réinitialiser le bouton
+                        submitBtn.textContent = "Confirmer ma sélection";
+                        submitBtn.disabled = false;
+                    } else {
+                        throw new Error('Erreur lors de l\'envoi du formulaire');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    alert('Une erreur est survenue lors de l\'envoi du formulaire. Veuillez réessayer plus tard.');
+                    submitBtn.textContent = "Confirmer ma sélection";
+                    submitBtn.disabled = false;
+                });
+            });
+        });
+    </script>
+</body>
+</html>
